@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record id="dzsale_client_form_view" model="ir.ui.view">
+			<field name="name">dzsale.client.form.view</field>
+			<field name="model">dzsale.client</field>
+			<field name="arch" type="xml">
+				<form string="Client">
+					<sheet>
+
+						<h1>Client</h1>
+						<h3>
+							<div>
+								<field name="name" />
+							</div>
+						</h3>
+
+							<group col="4">
+								<field name="dob" />
+								<field name="sex" widget="radio"/>
+								<field name="mob" />
+								<field name="passsport_id" />
+								<field name="passsport_delivery" />
+								<field name="passsport_expiry" />
+								<field name="adress" />
+								<field name="debt" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="dzsale_client_tree_view" model="ir.ui.view">
+			<field name="name">dzsale.client.tree.view</field>
+			<field name="model">dzsale.client</field>
+			<field name="arch" type="xml">
+				<tree string="Clients">
+					<field name="name" />
+					<field name="mob" />
+					<field name="dob" />
+					<field name="debt" />
+
+				</tree>
+			</field>
+		</record>
+		<record id="dzsale_client_search_view" model="ir.ui.view">
+			<field name="name">dzsale.client.search.view</field>
+			<field name="model">dzsale.client</field>
+			<field name="arch" type="xml">
+				<search string="Clients">
+					<field name="name" />
+					<group expand="0" string="Grouper par">
+						<filter name="groupby_cie" context="{'group_by': 'dob:year'}" string="Année de naissance"
+																			help="Grouper par année de naissance" />
+
+						
+					</group>
+			
+				</search>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="dzsale_action_client_view">
+			<field name="name">Clients</field>
+			<field name="res_model">dzsale.client</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="dzsale_client_tree_view" />
+			<field name="search_view_id" ref="dzsale_client_search_view"/>
+			<field name="context">{'search_default_today':1}</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					<!--Créer votre premiere client...-->
+				</p>
+			</field>
+		</record>
+
+
+	</data>
+</openerp>

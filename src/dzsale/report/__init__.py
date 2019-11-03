@@ -1,0 +1,1 @@
+import dailysale_parser

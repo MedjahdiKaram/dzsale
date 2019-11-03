@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record id="dzsale_sale_form_view" model="ir.ui.view">
+			<field name="name">dzsale.sale.form.view</field>
+			<field name="model">dzsale.sale</field>
+			<field name="arch" type="xml">
+				<form string="Sesion de vente">
+					<header>
+						<button string="Fermer session" name="action_do_close" type="object" states="open" />
+						<button string="Ouvrir la session" name="action_do_open" type="object" states="draft" />
+						<field name="state" widget="statusbar" />
+						
+					</header>
+					<sheet>
+
+						<h1>Session</h1>
+					
+
+						<group col="6">
+							<field name="date"  attrs="{'readonly':[('state','=','closed')]}" />
+							<field name="name" />
+						</group>
+
+						<field name="slines"  attrs="{'readonly':[('state','!=','open')]}">
+							<tree editable="bottom">
+								<field name="name" invisible="1" />
+								<field name="cie" />
+								<field name="ticket" />
+								<field name="client" />
+								<field name="organisation" />
+								<field name="price"/>								
+								<field name="amount"/>
+								<field name="invoice_num"/>
+								<field name="cheque"/>
+                <field name="transaction_type" />
+								<field name="payment_type" />
+							</tree>
+						</field>
+						<div  attrs="{'invisible':[('state','!=','close')]}">
+              <group col="3">
+                <group col="2" string="Payements">
+                  <field name="total_payment_checkout" />
+                  <field name="total_payment_bank" />
+                  <field name="total_payment_inaccount" />
+                </group>
+                <group col="2" string="Dettes">
+                  <field name="total_dept_checkout" />
+                  <field name="total_debt_bank" />
+                </group>
+                <group col="2" string="Remboursements">
+                  <field name="total_refund_checkout" />
+                  <field name="total_refund_inaccount"/>
+                </group>
+                <group col="2" string="Totaux">
+                  <field name="total_checkout" />
+                  <field name="total_refund" />
+                </group>
+              </group>					
+							</div>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="dzsale_sale_tree_view" model="ir.ui.view">
+			<field name="name">dzsale.sale.tree.view</field>
+			<field name="model">dzsale.sale</field>
+			<field name="arch" type="xml">
+				<tree string="Sessions">
+					<field name="date" />          
+					<field name="total_checkout" />
+					<field name="total_payment_checkout" />
+					<field name="total_dept" />
+					<field name="total_refund" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+		<record id="dzsale_sale_search_view" model="ir.ui.view">
+			<field name="name">dzsale.sale.search.view</field>
+			<field name="model">dzsale.sale</field>
+			<field name="arch" type="xml">
+				<search string="Sessions">
+					<field name="date" />
+					<field name="total_checkout" />
+					<field name="total_dept" />
+					<field name="total_refund" />
+					<group expand="0" string="Grouper par">
+						
+
+						<filter name="groupby_month" context="{'group_by': 'date:month'}" string="Mois"
+							help="Grouper par mois" />
+						<filter name="groupby_day" context="{'group_by': 'date:day'}" string="Jour"
+					help="Grouper par jour" />
+					</group>
+				</search>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="dzsale_action_sale_view">
+			<field name="name">Sessions</field>
+			<field name="res_model">dzsale.sale</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="dzsale_sale_tree_view" />
+			<field name="search_view_id" ref="dzsale_sale_search_view"/>
+			<field name="context">{'search_default_today':1}</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					<!--Créer votre premiere vente...-->
+				</p>
+			</field>
+		</record>
+
+
+	</data>
+</openerp>

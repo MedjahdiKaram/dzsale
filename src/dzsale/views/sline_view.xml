@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="dzsale_sline_form_view" model="ir.ui.view">
+			<field name="name">dzsale.sline.form.view</field>
+			<field name="model">dzsale.sline</field>
+			<field name="arch" type="xml">
+				<form string="sline">
+					<sheet>
+
+						<h1>
+              ligne de vente <field name="name" />
+            </h1>
+					
+
+							<group col="4">
+                <field name="write_date" string="Date d'édition" />
+								<field name="payment_type" widget="radio"/>
+								<field name="transaction_type" widget="radio"/>
+								<field name="cie" />
+								<field name="ticket" />
+								<field name="client" />
+								<field name="organisation" />
+								<field name="invoice_num" />
+                <field name="amount" />
+
+							</group>
+						<h3>
+							<div>
+								
+
+							</div>
+						</h3>
+			 
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="dzsale_sline_tree_view" model="ir.ui.view">
+			<field name="name">dzsale.sline.tree.view</field>
+			<field name="model">dzsale.sline</field>
+			<field name="arch" type="xml">
+				<tree string="slines">
+					<field name="name" />
+					<field name="transaction_type" />
+					<field name="payment_type" />          
+					<field name="client" />
+          <field name="organisation" />
+					<field name="price" sum="Total"/>
+					<field name="amount" sum="Total"/>
+
+				</tree>
+			</field>
+		</record>
+		<record id="dzsale_sline_search_view" model="ir.ui.view">
+			<field name="name">dzsale.sline.search.view</field>
+			<field name="model">dzsale.sline</field>
+			<field name="arch" type="xml">
+				<search string="slines">
+					<field name="name" />
+					<field name="transaction_type" />
+					<field name="payment_type" />
+					<field name="client" />
+					<field name="organisation"/>
+					<group expand="0" string="Grouper par">
+            <filter name="groupby_cie" context="{'group_by': 'cie'}" string="C.I.E"
+													help="Grouper par C.I.E" />
+            <filter name="groupby_client" context="{'group_by': 'client'}" string="Client"
+													help="Grouper par Client" />
+            <filter name="groupby_organisation" context="{'group_by': 'organisation'}" string="Organisme"
+													help="Grouper par Organisme" />
+            <filter name="groupby_transaction_type" context="{'group_by': 'transaction_type'}" string="Transaction"
+													help="Grouper par type de transaction" />
+            <filter name="groupby_payment_type" context="{'group_by': 'payment_type'}" string="Mode de payement"
+													help="Grouper par mode de payement" />
+						<filter name="groupby_yeah" context="{'group_by': 'write_date:year'}" string="Année"
+												help="Grouper par Année" />
+						<filter name="groupby_month" context="{'group_by': 'write_date:month'}" string="Mois"
+												help="Grouper par mois" />
+						<filter name="groupby_day" context="{'group_by': 'write_date:day'}" string="Jour"
+					help="Grouper par jour" />
+					</group>
+				</search>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="dzsale_action_sline_view">
+			<field name="name">Lignes de vente</field>
+			<field name="res_model">dzsale.sline</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="dzsale_sline_tree_view" />
+			<field name="search_view_id" ref="dzsale_sline_search_view"/>
+			<field name="context">{'search_default_today':1}</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					<!--Créer votre premiere sline...-->
+				</p>
+			</field>
+		</record>
+
+
+	</data>
+</openerp>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+			
+	<menuitem
+		id="dzsale_sale_root_menu" 
+		name="Sessions"
+		sequence="0"
+			action="dzsale.dzsale_action_sale_view"
+		/>
+		<menuitem
+	id="dzsale_client_root_menu"
+	name="Clients"
+	sequence="1"
+	action="dzsale.dzsale_action_client_view"
+		/>
+		<menuitem
+	id="dzsale_organisation_root_menu"
+	name="Organismes"
+		action="dzsale.dzsale_action_organisation_view"
+	sequence="2"
+		/>
+		<menuitem
+		id="dzsale_sline_root_menu"
+		name="Lignes de vente"
+		sequence="3"
+		action="dzsale.dzsale_action_sline_view"
+		
+		/>
+		<menuitem
+	id="dzsale_cie_root_menu"
+	name="C.I.E"
+	action="dzsale.dzsale_action_cie_view"
+	sequence="4"
+		/>
+
+
+
+
+
+	</data>
+</openerp>

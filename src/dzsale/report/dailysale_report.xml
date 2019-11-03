@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+  
+  <data>
+    
+    
+    <report
+        id="report_sale"
+        model="dzsale.sale"
+        string="Rapport journalier"
+        name="dzsale.dailysale_report"
+        file="dzsale.dailysale_report"
+        report_type="qweb-pdf" />
+
+    <template id="dailysale_report">
+      
+      <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+         
+        
+            <div class="page">
+
+              <!--<div class="oe_structure"/>-->
+              <div class="row">
+                <strong>
+                
+                  <div class="col-xs-4">
+                    <h3>
+                    <span style="{ text-align: left;}" t-field="doc.create_uid.company_id.name" />
+                      </h3>
+                  </div>
+                  <div class="col-xs-4">
+                    <center>
+                      
+                    <h3>Rapport Journalier</h3>
+                    </center>
+                  </div>
+                  <div class="col-xs-4"  style="text-align: right">
+                    <h3>
+                      <span>Compte </span>
+                      <span t-field="doc.state"></span>
+                      <span> le,</span>
+                      <span t-field="doc.date" />
+                    </h3>
+                  </div>
+                 
+             
+               
+                </strong>
+                <hr style="width: 100%; color: black; height: 2px; background-color:black;" />
+                <br/>
+              </div>
+              <div class="row">
+               
+                  <table border="2" style="width:100%;" class="table">
+                    <thead>
+                      
+                      <tr style="font-weight:bold;">
+                        <th style="padding:2px">C.I.E</th>
+                        <th style="padding:2px">BILLET</th>
+                        <th style="padding:2px">CLIENT</th>
+                        <th style="padding:2px">ORGANISME</th>
+                        <th style="padding:2px">PRIX</th>
+                        <th style="padding:2px">TRANSACTION</th>
+                        <th style="padding:2px">MODE DE PAIEMENT</th>                       
+                        <th style="padding:2px">MONTANT</th>
+                        <th style="padding:2px" t-if="doc.total_dept>0">FACTURE</th>                  
+                        <th style="padding:2px" t-if="doc.total_debt_bank>0 or doc.total_payment_bank>0">CHEQUE</th>
+                     
+                      </tr>
+                    
+                    </thead>
+                    <tbody>
+                      <tr t-foreach="doc.slines" t-as="sl">
+                        <td  style="padding:1px">
+                          <span t-field="sl.cie"/>
+                        </td>  
+                        <td  style="padding:1px">
+                          <span t-field="sl.ticket"/>
+                        </td>
+
+                        <td style="padding:1px">
+                          <span t-field="sl.client.name"/>
+                        </td>
+                        <td style="padding:1px">
+                          <span t-field="sl.organisation.name"/>
+                        </td>
+                        <td style="padding:1px">
+                          <span t-field="sl.price"/>
+                        </td>
+
+                        <td style="padding:1px">
+                          <span t-field="sl.transaction_type"/>
+                        </td>
+                        <td style="padding:1px">
+                          <span t-field="sl.payment_type"/>
+                        </td>
+
+                        <td t-if="sl.transaction_type=='payment' and sl.payment_type=='inaccount'" style="padding:1px;background-color:IndianRed;">
+                          <span t-field="sl.amount"/>
+                        </td> 
+                        <td t-if="(sl.transaction_type=='payment' and sl.payment_type=='checkout') or ( sl.transaction_type=='payment' and sl.transaction_type=='bank')" style="padding:1px;background-color:white;">
+						       <!--<td t-if="(sl.transaction_type=='payment' and sl.payment_type!='inaccount') or ( sl.transaction_type!='collection' and sl.transaction_type!='refund')" style="padding:1px;background-color:white;">-->
+                          <span t-field="sl.amount"/>
+                        </td> 
+                        <td  t-if="sl.transaction_type=='collection'" style="padding:1px;background-color:Green;">
+                          <span t-field="sl.amount"/>
+                        </td>
+
+                        <td  t-if="sl.transaction_type=='refund'" style="padding:1px;background-color:Yellow;">
+                          <span t-field="sl.amount"/>
+                        </td>
+                        
+                        <td  t-if="doc.total_dept>0 or doc.total_payment_inaccount>0" style="padding:1px">
+                          <span t-field="sl.invoice_num"/>
+                        </td>
+                        <td  style="padding:1px" t-if="doc.total_debt_bank>0 or doc.total_payment_bank>0">
+                          <span t-field="sl.cheque"/>
+                        </td>
+                        
+                      </tr>
+                    </tbody>
+                  </table>
+                <hr style="width: 100%; color: black; height: 2px; background-color:black;" />
+                <br/>
+              </div>
+              <div class="row">
+                <div class="col-xs-3">
+                  <div t-if="doc.total_payment_checkout>0">
+                    <span>PAIEMENT EN ESPECE:</span>
+
+
+                    <span t-field="doc.total_payment_checkout"></span>
+
+                  </div>
+                  <div  t-if="doc.total_payment_bank>0">
+                    <span>PAIEMENT EN CHEQUE:</span>
+                    <span t-field="doc.total_payment_bank"></span></div>
+                  <div t-if="doc.total_payment_inaccount>0">
+                    <span>PAIEMENT EN COMPTE:</span>
+                    <span t-field="doc.total_payment_inaccount"></span>
+                  </div>
+                </div>
+                  <div class="col-xs-3">
+                    <div t-if="doc.total_dept_checkout>0">
+                      <span>PAIEMENT DES DETTES EN ESPECE:</span>
+                      <span t-field="doc.total_dept_checkout"></span></div>
+                    <div t-if="doc.total_debt_bank>0">
+                      <span>PAIEMENT DES DETTES EN CHEQUE:</span>
+                    <span t-field="doc.total_debt_bank"></span>
+                    </div>
+                  </div>
+                  <div class="col-xs-3">
+                    <div t-if="doc.total_refund_checkout>0">
+                      <span>REMBOURSEMENT EN ESPECE:</span>
+                      <span t-field="doc.total_refund_checkout"></span>
+                    </div>
+                    <div t-if="doc.total_refund_inaccount>0">
+                      <span>TOTAL DES AVOIRS:</span>
+                      <span t-field="doc.total_refund_inaccount"></span></div>
+                  </div>
+                  <div class="col-xs-3">
+
+                    <div t-if="doc.total_payment>0">
+                      <span>TOTAL DES PAIEMENTS:</span>
+                      <span t-field="doc.total_payment"></span>
+                    </div>
+                    <div t-if="doc.total_refund>0">
+                      <span>TOTAL DES REMBOURSEMENTS:</span>
+                      <span t-field="doc.total_refund"></span>
+                    </div>
+
+                    <div t-if="doc.total_checkout>0">
+                      <span>TOTAL EN CAISSE:</span>
+                      <span t-field="doc.total_checkout"></span>
+                    </div>
+                  </div>
+              </div>
+              <div class="row" t-if="doc.total_payment_inaccount>0">
+                <div class="col-md-12">
+                  <h4>
+                    <u>PAIEMENT EN COMPTE:</u>
+                    
+                  </h4>
+                  <span t-if="doc.state!='closed'">
+                    <i>(La session n'est pas fermée, les montants ne sont pas inclus dans les dettes affichées)</i>
+                  </span>
+                  <div t-foreach="doc.slines" t-as="sl">
+                   
+                    <div t-if="sl.transaction_type=='payment' and sl.payment_type=='inaccount'">
+                      <div t-if="not sl.organisation">
+                        <strong>
+                        <span  t-field="sl.client.name"/>
+                        </strong>
+                        <span>:</span>             
+                        <span  t-field="sl.amount"/>                      
+                        <!--<span> Dette:</span>                                         
+                        <span  t-field="sl.client.debt"/>-->
+                      </div>
+                      
+                      <!--<div t-if="sl.organisation">
+
+                        <strong><span  t-field="sl.organisation.name"/>
+                        </strong>
+
+
+                       <span  t-field="sl.amount"/>                       
+                        <span> Dette:</span>                   
+                        <span  t-field="sl.organisation.debt"/>
+                      </div>-->
+                        
+                
+              
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                  <div class="col-md-12" t-foreach="doc.get_organism_detail()" t-as="od" >
+                     <strong t-if="od['Encompte']>0 or od['Encaissement']>0" t-esc="od['name']" > </strong>
+					 <strong t-if="not od['name'] and (od['Encompte']>0 or od['Encaissement']>0)">SANS ORGANISME
+					 </strong>
+                     <!--<strong style="margin-left:10px">Encaissement: </strong><span t-esc="od['Encaissement']"></span>-->
+                     <strong style="margin-left:10px" t-if="od['Encompte']>0"> > E\C: </strong><span t-if="od['Encompte']>0" t-esc="od['Encompte']"></span>
+                   <strong style="margin-left:10px" t-if="od['Encaissement']>0">> Encaissement de dette: </strong><span t-if="od['Encaissement']>0" t-esc="od['Encaissement']"></span>
+
+                  </div>
+
+              </div>
+            </div>
+
+
+          </t>
+        </t>
+
+    </template>
+
+
+  </data>
+</openerp>

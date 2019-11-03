@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report 
+            id="report_sale"
+            string="Journal des ventes"
+            model="dzsale.sale" 
+            report_type="qweb-pdf"
+            file="dzsale.dailysale_report" 
+            name="dzsale.dailysale_report" 
+        />
+    </data>
+</openerp>
